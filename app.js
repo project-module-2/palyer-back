@@ -48,4 +48,10 @@ app.use('/api/auth',authRouter);
 app.use('/api/friendRequests',friendRequestRouter);
 app.use('/api/partyRequests',partyRequestRouter);
 
+//esto es muy importante es para seguir en la ruta despues de actualizar
+//podamos entrar a cualquier ruta
+app.use("*", (req,res)=>{
+    res.sendFile(path.join(__dirname, "public","index.html"));
+   });
+
 module.exports = app;
