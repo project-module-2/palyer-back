@@ -8,7 +8,7 @@ const User = require('../models/User');
 const {checkRole, veryToken, checkParty} = require('../utils/auth-mid');
 
 //Crear friend request
-router.patch('/createFriendRequest', veryToken, checkRole(['Admin','USER']), (req, res, next) => {
+router.patch('/createFriendRequest', veryToken, (req, res, next) => {
   const userId = req.user._id;
   const myRequest = {date,message,_to} = req.body;
 

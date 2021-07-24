@@ -198,21 +198,19 @@ router.patch('/unBlockUser', veryToken, checkRole(['Admin','USER']), (req, res, 
 });
 
 //Eliminar amigo
-router.patch('/unFriend/:id', veryToken, checkRole(['Admin']), (req, res, next)=> {
+router.patch('/unFriend', veryToken, checkRole(['Admin','USER']), (req, res, next)=> {
   //Sacamos el parametro id del req.params
-  const{id} = req.params;
-
-  User.findByIdAndUpdate({_id: req.user._id} ,{$pull:{_friends:id}}, {new:true})
-  .then((user) => {
-    res.status(200).json({msg:`Se ha borrado a el usuario exitosamente ${user._friends}`});
+  const{id} = req.body;
+  console.log("Eliminando a",id);
+  Promise.all([
+    User.findByIdAndUpdate({_id: req.user._id} ,{$pull:{_friends:id}}, {new:true}),
+    User.findByIdAndUpdate({_id: id} ,{$pull:{_friends:req.user._id}}, {new:true})
+  ])
+  .then(()=>{
+    res.status(200).json({msg:"Usuario eliminado de tu lista de amigos"});
   })
-  .catch( error => res.status(400).json({error}));
+  .catch( error => res.status(400).json({msg:`${error} Error, no se pudo borrar al usuario`}));
 
-  User.findByIdAndUpdate({_id: id} ,{$pull:{_friends:req.user._id}}, {new:true})
-  .then((friend) => {
-    res.status(200).json({msg:`Se ha borrado a el usuario exitosamente ${friend._friends}`});
-  })
-  .catch( error => res.status(400).json({error}));
 });
 
 //Buscar la lista de parties de la cual pertenece el usuario
