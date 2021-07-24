@@ -22,7 +22,7 @@ const app = express();
 
 app.use(
         cors({
-            origin:["http://localhost:3000","https://arena-gg.herokuapp.com/"],
+            origin:["http://localhost:3000","https://arenagg.herokuapp.com/"],
             credentials:true
         })
     );
